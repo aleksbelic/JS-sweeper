@@ -11,15 +11,14 @@ function generateBoard(boardWidth = board.size.width, boardHeight = board.size.h
 
 	// validate params
 	let params = [boardWidth, boardHeight, mineCount]; 
-	for (i = 0; i < params.length; i++) {
+	for (let i = 0; i < params.length; i++) {
 		if (!Number.isInteger(params[i])) {
 			throw 'ERROR: Parameter "' + params[i] + '\" in function "generateBoard" needs to be an integer.';
 		}
 	}
 
 	if (mineCount > boardHeight * boardWidth) {
-		console.log('Too many mines for such a small board (max is ' + (boardWidth * boardHeight) + ').');
-		return false;
+		throw 'ERROR: Can\'t place ' + mineCount + ' mines on board with ' + (boardWidth * boardHeight) + ' fields (use less mines or make your board bigger).';
 	}
 
 	board.size.width = boardWidth;
@@ -27,23 +26,38 @@ function generateBoard(boardWidth = board.size.width, boardHeight = board.size.h
 	board.mineCount = mineCount;
 
 	let boardContainer = document.getElementById('js-sweeper');
-	for (i = 0; i < boardHeight; i++) {
+	for (let i = 0; i < boardHeight; i++) {
 		let boardRow = document.createElement('div');
 		boardRow.className = 'row';
 		boardContainer.appendChild(boardRow);
-		for (j = 0; j < boardWidth; j++) {
+		for (let j = 0; j < boardWidth; j++) {
 			let cell = document.createElement('div');
 			cell.className = 'cell';
-			let cellText = document.createTextNode('X');
-			cell.appendChild(cellText);
 			boardRow.appendChild(cell);
 		}
 	}
+
+	randomizeMines();
 }
 
 function randomizeMines() {
-	for (i = 0; i < board.mineCount; i++) {
-		// Math.floor(Math.random() * Math.floor(max));
+	let mineFieldsIndexes = getNUniqueRandomNumbers(0, (board.size.width * board.size.height - 1), board.mineCount);
+	// console.log(mineFieldsIndexes);
+	for (let i = 0; i < mineFieldsIndexes.length; i++) {
+		document.getElementsByClassName('cell')[mineFieldsIndexes[i]].innerHTML = 'O';
 	}
-	
+}
+
+function getNUniqueRandomNumbers(min, max, n) {
+	let uniqueNumbers = [];
+	for (let i = min; i <= max; i++) { 
+		uniqueNumbers.push(i);
+	}
+	let nUniqueRandomNumbers = [];
+	for (let i = 0; i < n; i++) {
+		let randomIndex = Math.floor((Math.random() * uniqueNumbers.length));
+		nUniqueRandomNumbers.push(uniqueNumbers[randomIndex]);
+		uniqueNumbers.splice(randomIndex, 1);
+	}
+	return nUniqueRandomNumbers;
 }

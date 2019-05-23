@@ -1,6 +1,7 @@
 #js-sweeper {
 	display: table;
-	border: 1vw ridge #BCBCBC;
+	border: 1vw ridge darkgray;
+	background-color: darkgray;
 }
 #js-sweeper .row {
 	display: table-row;
@@ -8,6 +9,7 @@
 #js-sweeper .cell {
 	width: 10vw;
 	height: 10vw;
+	background-color: lightgray;
 	font-size: 6vw;
 	cursor: pointer;
 	border-style: outset;
