@@ -44,7 +44,9 @@ function randomizeMines() {
 	let mineFieldsIndexes = getNUniqueRandomNumbers(0, (board.size.width * board.size.height - 1), board.mineCount);
 	// console.log(mineFieldsIndexes);
 	for (let i = 0; i < mineFieldsIndexes.length; i++) {
-		document.getElementsByClassName('cell')[mineFieldsIndexes[i]].innerHTML = 'O';
+		let mineField = document.getElementsByClassName('cell')[mineFieldsIndexes[i]];
+		mineField.setAttribute('data-mine', 'true');
+		mineField.innerHTML = 'O';
 	}
 }
 
