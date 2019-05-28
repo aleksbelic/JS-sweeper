@@ -8,6 +8,7 @@ class Board {
     width: number = 10;
     height: number = 10;
     mineCount: number = 10;
+    cells: Cell[] = [];
 
     constructor(width: number, height: number, mineCount: number ) {
         // TODO: validate params
@@ -32,12 +33,17 @@ class Board {
 
     randomizeMines(): void {
         let mineFieldsIndexes = Helper.getNUniqueRandomNumbers(0, (this.width * this.height - 1), this.mineCount);
+        for (let mineFieldIndex of mineFieldsIndexes) {
+            this.cells[mineFieldIndex].mine = true;
+        }
+
         // console.log(mineFieldsIndexes);
+        /*
         for (let i = 0; i < mineFieldsIndexes.length; i++) {
             let mineField = document.getElementsByClassName('cell')[mineFieldsIndexes[i]];
             mineField.setAttribute('data-mine', 'true');
             mineField.innerHTML = 'O';
-        }
+        }*/
     }
 }
 
@@ -48,6 +54,7 @@ class Row {
 }
 
 class Cell {
+    mine: boolean;
     constructor() {
         // ---
     }
@@ -58,18 +65,20 @@ function generateBoard(width: number, height: number, mineCount: number) {
     let board = new Board(width, height, mineCount);
 
 	for (let i = 0; i < board.height; i++) {
-        let row = new Row();
-		let boardRow = document.createElement('div');
-		boardRow.className = 'row';
-		boardContainer.appendChild(boardRow);
+        //let row = new Row();
+		//let boardRow = document.createElement('div');
+		//boardRow.className = 'row';
+		//boardContainer.appendChild(boardRow);
 		for (let j = 0; j < board.width; j++) {
             let cell = new Cell();
-			let boardCell = document.createElement('div');
-			boardCell.className = 'cell';
-			boardRow.appendChild(boardCell);
+            board.cells.push(cell);
+			//let boardCell = document.createElement('div');
+			//boardCell.className = 'cell';
+			//boardRow.appendChild(boardCell);
 		}
 	}
-	board.randomizeMines();
+    board.randomizeMines();
+    console.log(board);
 }
 
 class Helper {
