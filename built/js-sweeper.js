@@ -50,17 +50,19 @@ var Cell = /** @class */ (function () {
     }
     return Cell;
 }());
-function generateBoard(boardWitdh, boardHeight, boardMineCount) {
+function generateBoard(width, height, mineCount) {
     var boardContainer = document.getElementById('js-sweeper');
-    var board = new Board(boardWitdh, boardHeight, boardMineCount);
+    var board = new Board(width, height, mineCount);
     for (var i = 0; i < board.height; i++) {
+        var row = new Row();
         var boardRow = document.createElement('div');
         boardRow.className = 'row';
         boardContainer.appendChild(boardRow);
         for (var j = 0; j < board.width; j++) {
-            var cell = document.createElement('div');
-            cell.className = 'cell';
-            boardRow.appendChild(cell);
+            var cell = new Cell();
+            var boardCell = document.createElement('div');
+            boardCell.className = 'cell';
+            boardRow.appendChild(boardCell);
         }
     }
     board.randomizeMines();

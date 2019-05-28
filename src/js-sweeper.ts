@@ -53,25 +53,27 @@ class Cell {
     }
 }
 
-function generateBoard(boardWitdh: number, boardHeight: number, boardMineCount: number) {
+function generateBoard(width: number, height: number, mineCount: number) {
     let boardContainer = document.getElementById('js-sweeper');
-    let board = new Board(boardWitdh, boardHeight, boardMineCount);
+    let board = new Board(width, height, mineCount);
 
 	for (let i = 0; i < board.height; i++) {
+        let row = new Row();
 		let boardRow = document.createElement('div');
 		boardRow.className = 'row';
 		boardContainer.appendChild(boardRow);
 		for (let j = 0; j < board.width; j++) {
-			let cell = document.createElement('div');
-			cell.className = 'cell';
-			boardRow.appendChild(cell);
+            let cell = new Cell();
+			let boardCell = document.createElement('div');
+			boardCell.className = 'cell';
+			boardRow.appendChild(boardCell);
 		}
 	}
 	board.randomizeMines();
 }
 
 class Helper {
-    static getNUniqueRandomNumbers(min, max, n): number[] {
+    static getNUniqueRandomNumbers(min: number, max: number, n: number): number[] {
         let uniqueNumbers = [];
 	    for (let i = min; i <= max; i++) { 
 		    uniqueNumbers.push(i);
