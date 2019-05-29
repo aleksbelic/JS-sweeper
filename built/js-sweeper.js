@@ -28,11 +28,13 @@ var Board = /** @class */ (function () {
         this.height = height;
         this.mineCount = mineCount;
     }
-    Board.prototype.randomizeMines = function () {
+    Board.prototype.plantMines = function () {
         var mineFieldsIndexes = Helper.getNUniqueRandomNumbers(0, (this.width * this.height - 1), this.mineCount);
         for (var _i = 0, mineFieldsIndexes_1 = mineFieldsIndexes; _i < mineFieldsIndexes_1.length; _i++) {
             var mineFieldIndex = mineFieldsIndexes_1[_i];
-            this.cells[mineFieldIndex].mine = true;
+            var boardRow = Math.floor(mineFieldIndex / this.width);
+            var boardColumn = mineFieldIndex % this.width;
+            this.cells[boardRow][boardColumn].mine = true;
         }
         // console.log(mineFieldsIndexes);
         /*
@@ -42,13 +44,24 @@ var Board = /** @class */ (function () {
             mineField.innerHTML = 'O';
         }*/
     };
+    Board.prototype.calculateHints = function () {
+        for (var cell in this.cells) {
+        }
+    };
+    Board.prototype.deploy = function () {
+        var boardContainer = document.getElementById('js-sweeper');
+        for (var i = 0; i < this.height; i++) {
+            var boardRow = document.createElement('div');
+            boardRow.className = 'row';
+            boardContainer.appendChild(boardRow);
+            for (var j = 0; j < this.width; j++) {
+                var boardCell = document.createElement('div');
+                boardCell.className = 'cell';
+                boardRow.appendChild(boardCell);
+            }
+        }
+    };
     return Board;
-}());
-var Row = /** @class */ (function () {
-    function Row() {
-        // ---
-    }
-    return Row;
 }());
 var Cell = /** @class */ (function () {
     function Cell() {
@@ -57,22 +70,16 @@ var Cell = /** @class */ (function () {
     return Cell;
 }());
 function generateBoard(width, height, mineCount) {
-    var boardContainer = document.getElementById('js-sweeper');
     var board = new Board(width, height, mineCount);
+    // adding rows, columns & cells
     for (var i = 0; i < board.height; i++) {
-        //let row = new Row();
-        //let boardRow = document.createElement('div');
-        //boardRow.className = 'row';
-        //boardContainer.appendChild(boardRow);
-        for (var j = 0; j < board.width; j++) {
-            var cell = new Cell();
-            board.cells.push(cell);
-            //let boardCell = document.createElement('div');
-            //boardCell.className = 'cell';
-            //boardRow.appendChild(boardCell);
-        }
+        board.cells.push([]);
+        for (var j = 0; j < board.width; j++)
+            board.cells[i].push(new Cell());
     }
-    board.randomizeMines();
+    board.plantMines(); // randoimize mines
+    board.calculateHints(); // calculating hints
+    board.deploy();
     console.log(board);
 }
 var Helper = /** @class */ (function () {
