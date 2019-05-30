@@ -19,17 +19,17 @@ class Board {
     constructor(width: number, height: number, mineCount: number) {
         // TODO: validate params
         /*
-            // validate params
-            let params = [boardWidth, boardHeight, mineCount]; 
-            for (let i = 0; i < params.length; i++) {
-                if (!Number.isInteger(params[i])) {
-                    throw 'ERROR: Parameter "' + params[i] + '\" in function "generateBoard" needs to be an integer.';
-                }
+        // validate params
+        let params = [boardWidth, boardHeight, mineCount]; 
+        for (let i = 0; i < params.length; i++) {
+            if (!Number.isInteger(params[i])) {
+                throw 'ERROR: Parameter "' + params[i] + '\" in function "generateBoard" needs to be an integer.';
             }
+        }
 
-            if (mineCount > boardHeight * boardWidth) {
-                throw 'ERROR: Can\'t place ' + mineCount + ' mines on board with ' + (boardWidth * boardHeight) + ' fields (use less mines or make your board bigger).';
-            }
+        if (mineCount > boardHeight * boardWidth) {
+            throw 'ERROR: Can\'t place ' + mineCount + ' mines on board with ' + (boardWidth * boardHeight) + ' fields (use less mines or make your board bigger).';
+        }
         */
 
         this.width = width;
@@ -58,18 +58,34 @@ class Board {
     }
 
     /**
-     * 
+     * Calculates hint for every cell without mine.
      */
     calculateHints(): void {
-        for (let row of this.cells) {
-            for (let cell of row) {
-                console.log(cell);
+        // loop through all rows and columns
+        for (let i = 0; i < this.height; i++) {
+            for (let j = 0; j < this.width; j++) {
+
+                let currentCell: Cell = this.cells[i][j];
+                if (!currentCell.mine) {
+                    // loop through previous, current & next row relative to current cell
+                    for (let rowChange of [-1, 0, 1]) {
+                        // loop through previous, current & next cell relative to current cell
+                        for (let columnChange of [-1, 0, 1]) {
+                            if (this.cells[i + rowChange] != undefined &&
+                                this.cells[i + rowChange][j + columnChange] != undefined &&
+                                this.cells[i + rowChange][j + columnChange].mine) {
+                                    currentCell.hint++;
+                            }
+                        }
+                    }
+                }  
             }
         }
+
     }
 
     /**
-     * 
+     * Deploys board to frontend by converting board object to HTML elements.
      */
     deploy(): void {
         let boardContainer = document.getElementById('js-sweeper');
@@ -81,6 +97,8 @@ class Board {
                 let boardCell = document.createElement('div');
                 boardCell.className = 'cell';
                 boardRow.appendChild(boardCell);
+                // just for testing purposes
+                // boardCell.innerHTML = this.cells[i][j].mine ? '*' : '' + this.cells[i][j].hint;
             }
         }
     }
@@ -90,11 +108,8 @@ class Board {
  * Cell class.
  */
 class Cell {
-    mine: boolean;
-    hint: number;
-    constructor() {
-        // ---
-    }
+    mine: boolean = false;
+    hint: number = 0;
 }
 
 /**

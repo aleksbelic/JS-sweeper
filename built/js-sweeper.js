@@ -14,17 +14,17 @@ var Board = /** @class */ (function () {
     function Board(width, height, mineCount) {
         // TODO: validate params
         /*
-            // validate params
-            let params = [boardWidth, boardHeight, mineCount];
-            for (let i = 0; i < params.length; i++) {
-                if (!Number.isInteger(params[i])) {
-                    throw 'ERROR: Parameter "' + params[i] + '\" in function "generateBoard" needs to be an integer.';
-                }
+        // validate params
+        let params = [boardWidth, boardHeight, mineCount];
+        for (let i = 0; i < params.length; i++) {
+            if (!Number.isInteger(params[i])) {
+                throw 'ERROR: Parameter "' + params[i] + '\" in function "generateBoard" needs to be an integer.';
             }
+        }
 
-            if (mineCount > boardHeight * boardWidth) {
-                throw 'ERROR: Can\'t place ' + mineCount + ' mines on board with ' + (boardWidth * boardHeight) + ' fields (use less mines or make your board bigger).';
-            }
+        if (mineCount > boardHeight * boardWidth) {
+            throw 'ERROR: Can\'t place ' + mineCount + ' mines on board with ' + (boardWidth * boardHeight) + ' fields (use less mines or make your board bigger).';
+        }
         */
         this.width = 10;
         this.height = 10;
@@ -54,19 +54,33 @@ var Board = /** @class */ (function () {
         }*/
     };
     /**
-     *
+     * Calculates hint for every cell without mine.
      */
     Board.prototype.calculateHints = function () {
-        for (var _i = 0, _a = this.cells; _i < _a.length; _i++) {
-            var row = _a[_i];
-            for (var _b = 0, row_1 = row; _b < row_1.length; _b++) {
-                var cell = row_1[_b];
-                console.log(cell);
+        // loop through all rows and columns
+        for (var i = 0; i < this.height; i++) {
+            for (var j = 0; j < this.width; j++) {
+                var currentCell = this.cells[i][j];
+                if (!currentCell.mine) {
+                    // loop through previous, current & next row relative to current cell
+                    for (var _i = 0, _a = [-1, 0, 1]; _i < _a.length; _i++) {
+                        var rowChange = _a[_i];
+                        // loop through previous, current & next cell relative to current cell
+                        for (var _b = 0, _c = [-1, 0, 1]; _b < _c.length; _b++) {
+                            var columnChange = _c[_b];
+                            if (this.cells[i + rowChange] != undefined &&
+                                this.cells[i + rowChange][j + columnChange] != undefined &&
+                                this.cells[i + rowChange][j + columnChange].mine) {
+                                currentCell.hint++;
+                            }
+                        }
+                    }
+                }
             }
         }
     };
     /**
-     *
+     * Deploys board to frontend by converting board object to HTML elements.
      */
     Board.prototype.deploy = function () {
         var boardContainer = document.getElementById('js-sweeper');
@@ -78,6 +92,8 @@ var Board = /** @class */ (function () {
                 var boardCell = document.createElement('div');
                 boardCell.className = 'cell';
                 boardRow.appendChild(boardCell);
+                // just for testing purposes
+                // boardCell.innerHTML = this.cells[i][j].mine ? '*' : '' + this.cells[i][j].hint;
             }
         }
     };
@@ -88,7 +104,8 @@ var Board = /** @class */ (function () {
  */
 var Cell = /** @class */ (function () {
     function Cell() {
-        // ---
+        this.mine = false;
+        this.hint = 0;
     }
     return Cell;
 }());
