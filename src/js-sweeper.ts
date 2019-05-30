@@ -10,7 +10,13 @@ class Board {
     mineCount: number = 10;
     cells: Cell[][] = [];
 
-    constructor(width: number, height: number, mineCount: number ) {
+    /**
+     * 
+     * @param width 
+     * @param height 
+     * @param mineCount 
+     */
+    constructor(width: number, height: number, mineCount: number) {
         // TODO: validate params
         /*
             // validate params
@@ -31,6 +37,9 @@ class Board {
         this.mineCount = mineCount;
     }
 
+    /**
+     * 
+     */
     plantMines(): void {
         let mineFieldsIndexes = Helper.getNUniqueRandomNumbers(0, (this.width * this.height - 1), this.mineCount);
         for (let mineFieldIndex of mineFieldsIndexes) {
@@ -48,12 +57,20 @@ class Board {
         }*/
     }
 
+    /**
+     * 
+     */
     calculateHints(): void {
-        for (let cell in this.cells) {
-            
+        for (let row of this.cells) {
+            for (let cell of row) {
+                console.log(cell);
+            }
         }
     }
 
+    /**
+     * 
+     */
     deploy(): void {
         let boardContainer = document.getElementById('js-sweeper');
         for (let i = 0; i < this.height; i++) {
@@ -69,6 +86,9 @@ class Board {
     }
 }
 
+/**
+ * Cell class.
+ */
 class Cell {
     mine: boolean;
     hint: number;
@@ -77,6 +97,9 @@ class Cell {
     }
 }
 
+/**
+ * 
+ */
 function generateBoard(width: number, height: number, mineCount: number) {
     let board = new Board(width, height, mineCount);
 
@@ -93,7 +116,20 @@ function generateBoard(width: number, height: number, mineCount: number) {
     console.log(board);
 }
 
+/**
+ * Helper class.
+ * Adding additional functionalities.
+ */
 class Helper {
+
+    /**
+     * Returns an array of n unique, random integers from range of numbers defined with upper and lower limit.
+     * 
+     * @param min   range lower limit
+     * @param max   range upper limit
+     * @param n     array count
+     * @returns     array of n unique, random integers from range of numbers defined with upper and lower limit (max & min)
+     */
     static getNUniqueRandomNumbers(min: number, max: number, n: number): number[] {
         let uniqueNumbers = [];
 	    for (let i = min; i <= max; i++) { 
@@ -107,4 +143,5 @@ class Helper {
 	    }
         return nUniqueRandomNumbers;
     }
+
 }

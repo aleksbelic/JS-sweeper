@@ -5,6 +5,12 @@
  * @param {number} mineCount    Mine count on board.
  */
 var Board = /** @class */ (function () {
+    /**
+     *
+     * @param width
+     * @param height
+     * @param mineCount
+     */
     function Board(width, height, mineCount) {
         // TODO: validate params
         /*
@@ -28,6 +34,9 @@ var Board = /** @class */ (function () {
         this.height = height;
         this.mineCount = mineCount;
     }
+    /**
+     *
+     */
     Board.prototype.plantMines = function () {
         var mineFieldsIndexes = Helper.getNUniqueRandomNumbers(0, (this.width * this.height - 1), this.mineCount);
         for (var _i = 0, mineFieldsIndexes_1 = mineFieldsIndexes; _i < mineFieldsIndexes_1.length; _i++) {
@@ -44,10 +53,21 @@ var Board = /** @class */ (function () {
             mineField.innerHTML = 'O';
         }*/
     };
+    /**
+     *
+     */
     Board.prototype.calculateHints = function () {
-        for (var cell in this.cells) {
+        for (var _i = 0, _a = this.cells; _i < _a.length; _i++) {
+            var row = _a[_i];
+            for (var _b = 0, row_1 = row; _b < row_1.length; _b++) {
+                var cell = row_1[_b];
+                console.log(cell);
+            }
         }
     };
+    /**
+     *
+     */
     Board.prototype.deploy = function () {
         var boardContainer = document.getElementById('js-sweeper');
         for (var i = 0; i < this.height; i++) {
@@ -63,12 +83,18 @@ var Board = /** @class */ (function () {
     };
     return Board;
 }());
+/**
+ * Cell class.
+ */
 var Cell = /** @class */ (function () {
     function Cell() {
         // ---
     }
     return Cell;
 }());
+/**
+ *
+ */
 function generateBoard(width, height, mineCount) {
     var board = new Board(width, height, mineCount);
     // adding rows, columns & cells
@@ -82,9 +108,21 @@ function generateBoard(width, height, mineCount) {
     board.deploy();
     console.log(board);
 }
+/**
+ * Helper class.
+ * Adding additional functionalities.
+ */
 var Helper = /** @class */ (function () {
     function Helper() {
     }
+    /**
+     * Returns an array of n unique, random integers from range of numbers defined with upper and lower limit.
+     *
+     * @param min   range lower limit
+     * @param max   range upper limit
+     * @param n     array count
+     * @returns     array of n unique, random integers from range of numbers defined with upper and lower limit (max & min)
+     */
     Helper.getNUniqueRandomNumbers = function (min, max, n) {
         var uniqueNumbers = [];
         for (var i = min; i <= max; i++) {
