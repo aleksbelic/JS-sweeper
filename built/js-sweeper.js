@@ -92,8 +92,16 @@ var Board = /** @class */ (function () {
                 var boardCell = document.createElement('div');
                 boardCell.className = 'cell';
                 boardRow.appendChild(boardCell);
-                // just for testing purposes
-                // boardCell.innerHTML = this.cells[i][j].mine ? '*' : '' + this.cells[i][j].hint;
+                // use for hint testing
+                if (this.cells[i][j].mine) {
+                    var mineImgElement = document.createElement('img');
+                    mineImgElement.setAttribute('src', './assets/img/mine.svg');
+                    boardCell.appendChild(mineImgElement);
+                    boardCell;
+                }
+                else if (this.cells[i][j].hint) {
+                    boardCell.innerHTML = '' + this.cells[i][j].hint;
+                }
             }
         }
     };
