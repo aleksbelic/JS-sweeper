@@ -88,20 +88,34 @@ var Board = /** @class */ (function () {
             var boardRow = document.createElement('div');
             boardRow.className = 'row';
             boardContainer.appendChild(boardRow);
-            for (var j = 0; j < this.width; j++) {
+            var _loop_1 = function (j) {
                 var boardCell = document.createElement('div');
                 boardCell.className = 'cell';
                 boardRow.appendChild(boardCell);
+                /*
                 // use for hint testing
                 if (this.cells[i][j].mine) {
-                    var mineImgElement = document.createElement('img');
+                    let mineImgElement = document.createElement('img');
                     mineImgElement.setAttribute('src', './assets/img/mine.svg');
                     boardCell.appendChild(mineImgElement);
-                    boardCell;
-                }
-                else if (this.cells[i][j].hint) {
+                    boardCell
+                } else if (this.cells[i][j].hint) {
                     boardCell.innerHTML = '' + this.cells[i][j].hint;
                 }
+                */
+                // right click event listener
+                boardCell.addEventListener('contextmenu', function (e) {
+                    e.preventDefault();
+                    if (!boardCell.classList.contains('flag')) {
+                        boardCell.classList.add('flag');
+                    }
+                    else {
+                        boardCell.classList.remove('flag');
+                    }
+                });
+            };
+            for (var j = 0; j < this.width; j++) {
+                _loop_1(j);
             }
         }
     };

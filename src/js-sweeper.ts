@@ -97,6 +97,7 @@ class Board {
                 let boardCell = document.createElement('div');
                 boardCell.className = 'cell';
                 boardRow.appendChild(boardCell);
+                /*
                 // use for hint testing
                 if (this.cells[i][j].mine) {
                     let mineImgElement = document.createElement('img');
@@ -106,6 +107,17 @@ class Board {
                 } else if (this.cells[i][j].hint) {
                     boardCell.innerHTML = '' + this.cells[i][j].hint;
                 }
+                */
+
+                // right click event listener
+                boardCell.addEventListener('contextmenu', e => {
+                    e.preventDefault();
+                    if (!boardCell.classList.contains('flag')) {
+                        boardCell.classList.add('flag');
+                    } else {
+                        boardCell.classList.remove('flag');
+                    }
+                });
 
             }
         }
