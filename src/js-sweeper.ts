@@ -47,14 +47,6 @@ class Board {
             let boardColumn:number = mineFieldIndex % this.width;
             this.cells[boardRow][boardColumn].mine = true;
         }
-
-        // console.log(mineFieldsIndexes);
-        /*
-        for (let i = 0; i < mineFieldsIndexes.length; i++) {
-            let mineField = document.getElementsByClassName('cell')[mineFieldsIndexes[i]];
-            mineField.setAttribute('data-mine', 'true');
-            mineField.innerHTML = 'O';
-        }*/
     }
 
     /**
@@ -95,19 +87,16 @@ class Board {
             boardContainer.appendChild(boardRow);
             for (let j = 0; j < this.width; j++) {
                 let boardCell = document.createElement('div');
-                boardCell.className = 'cell';
-                boardRow.appendChild(boardCell);
+                boardCell.classList.add('cell');
                 /*
                 // use for hint testing
                 if (this.cells[i][j].mine) {
-                    let mineImgElement = document.createElement('img');
-                    mineImgElement.setAttribute('src', './assets/img/mine.svg');
-                    boardCell.appendChild(mineImgElement);
-                    boardCell
+                    boardCell.classList.add('mine');
                 } else if (this.cells[i][j].hint) {
                     boardCell.innerHTML = '' + this.cells[i][j].hint;
                 }
                 */
+                boardRow.appendChild(boardCell);
 
                 // right click event listener
                 boardCell.addEventListener('contextmenu', e => {

@@ -45,13 +45,6 @@ var Board = /** @class */ (function () {
             var boardColumn = mineFieldIndex % this.width;
             this.cells[boardRow][boardColumn].mine = true;
         }
-        // console.log(mineFieldsIndexes);
-        /*
-        for (let i = 0; i < mineFieldsIndexes.length; i++) {
-            let mineField = document.getElementsByClassName('cell')[mineFieldsIndexes[i]];
-            mineField.setAttribute('data-mine', 'true');
-            mineField.innerHTML = 'O';
-        }*/
     };
     /**
      * Calculates hint for every cell without mine.
@@ -90,19 +83,16 @@ var Board = /** @class */ (function () {
             boardContainer.appendChild(boardRow);
             var _loop_1 = function (j) {
                 var boardCell = document.createElement('div');
-                boardCell.className = 'cell';
-                boardRow.appendChild(boardCell);
+                boardCell.classList.add('cell');
                 /*
                 // use for hint testing
                 if (this.cells[i][j].mine) {
-                    let mineImgElement = document.createElement('img');
-                    mineImgElement.setAttribute('src', './assets/img/mine.svg');
-                    boardCell.appendChild(mineImgElement);
-                    boardCell
+                    boardCell.classList.add('mine');
                 } else if (this.cells[i][j].hint) {
                     boardCell.innerHTML = '' + this.cells[i][j].hint;
                 }
                 */
+                boardRow.appendChild(boardCell);
                 // right click event listener
                 boardCell.addEventListener('contextmenu', function (e) {
                     e.preventDefault();
