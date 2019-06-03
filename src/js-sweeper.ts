@@ -134,8 +134,8 @@ function generateBoard(width: number, height: number, mineCount: number) {
             board.cells[i].push(new Cell());
     }
     
-    board.plantMines();     // randoimize mines
-    board.calculateHints(); // calculating hints
+    board.plantMines();     // randomize mines
+    board.calculateHints(); // calculate hints
     board.deploy();
     console.log(board);
 }
