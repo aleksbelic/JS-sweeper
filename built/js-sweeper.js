@@ -4,14 +4,14 @@
  * @param {number} height       Board height.
  * @param {number} mineCount    Mine count on board.
  */
-var Board = /** @class */ (function () {
+class Board {
     /**
-     *
+     * Board constructor.
      * @param width
      * @param height
      * @param mineCount
      */
-    function Board(width, height, mineCount) {
+    constructor(width, height, mineCount) {
         // TODO: validate params
         /*
         // validate params
@@ -35,32 +35,42 @@ var Board = /** @class */ (function () {
         this.mineCount = mineCount;
     }
     /**
-     *
+     * Randomizes positions of mines.
      */
-    Board.prototype.plantMines = function () {
-        var mineFieldsIndexes = Helper.getNUniqueRandomNumbers(0, (this.width * this.height - 1), this.mineCount);
-        for (var _i = 0, mineFieldsIndexes_1 = mineFieldsIndexes; _i < mineFieldsIndexes_1.length; _i++) {
-            var mineFieldIndex = mineFieldsIndexes_1[_i];
-            var boardRow = Math.floor(mineFieldIndex / this.width);
-            var boardColumn = mineFieldIndex % this.width;
+    plantMines() {
+        let mineFieldsIndexes = Helper.getNUniqueRandomNumbers(0, (this.width * this.height - 1), this.mineCount);
+        // remove current mines
+        this.removeMines();
+        // plant new mines
+        for (let mineFieldIndex of mineFieldsIndexes) {
+            let boardRow = Math.floor(mineFieldIndex / this.width);
+            let boardColumn = mineFieldIndex % this.width;
             this.cells[boardRow][boardColumn].mine = true;
         }
-    };
+    }
+    /**
+     * Cleans the board of all mines.
+     */
+    removeMines() {
+        for (let row = 0; row < this.height; row++) {
+            for (let column = 0; column < this.width; column++) {
+                this.cells[row][column].mine = false;
+            }
+        }
+    }
     /**
      * Calculates hint for every cell without mine.
      */
-    Board.prototype.calculateHints = function () {
+    calculateHints() {
         // loop through all rows and columns
-        for (var i = 0; i < this.height; i++) {
-            for (var j = 0; j < this.width; j++) {
-                var currentCell = this.cells[i][j];
+        for (let i = 0; i < this.height; i++) {
+            for (let j = 0; j < this.width; j++) {
+                let currentCell = this.cells[i][j];
                 if (!currentCell.mine) {
                     // loop through previous, current & next row relative to current cell
-                    for (var _i = 0, _a = [-1, 0, 1]; _i < _a.length; _i++) {
-                        var rowChange = _a[_i];
+                    for (let rowChange of [-1, 0, 1]) {
                         // loop through previous, current & next cell relative to current cell
-                        for (var _b = 0, _c = [-1, 0, 1]; _b < _c.length; _b++) {
-                            var columnChange = _c[_b];
+                        for (let columnChange of [-1, 0, 1]) {
                             if (this.cells[i + rowChange] != undefined &&
                                 this.cells[i + rowChange][j + columnChange] != undefined &&
                                 this.cells[i + rowChange][j + columnChange].mine) {
@@ -71,18 +81,18 @@ var Board = /** @class */ (function () {
                 }
             }
         }
-    };
+    }
     /**
      * Deploys board to frontend by converting board object to HTML elements.
      */
-    Board.prototype.deploy = function () {
-        var boardContainer = document.getElementById('js-sweeper');
-        for (var i = 0; i < this.height; i++) {
-            var boardRow = document.createElement('div');
+    deploy() {
+        let boardContainer = document.getElementById('js-sweeper');
+        for (let i = 0; i < this.height; i++) {
+            let boardRow = document.createElement('div');
             boardRow.className = 'row';
             boardContainer.appendChild(boardRow);
-            var _loop_1 = function (j) {
-                var boardCell = document.createElement('div');
+            for (let j = 0; j < this.width; j++) {
+                let boardCell = document.createElement('div');
                 boardCell.classList.add('cell');
                 /*
                 // use for hint testing
@@ -94,7 +104,7 @@ var Board = /** @class */ (function () {
                 */
                 boardRow.appendChild(boardCell);
                 // right click event listener
-                boardCell.addEventListener('contextmenu', function (e) {
+                boardCell.addEventListener('contextmenu', e => {
                     e.preventDefault();
                     if (!boardCell.classList.contains('flag')) {
                         boardCell.classList.add('flag');
@@ -103,33 +113,28 @@ var Board = /** @class */ (function () {
                         boardCell.classList.remove('flag');
                     }
                 });
-            };
-            for (var j = 0; j < this.width; j++) {
-                _loop_1(j);
             }
         }
-    };
-    return Board;
-}());
+    }
+}
 /**
  * Cell class.
  */
-var Cell = /** @class */ (function () {
-    function Cell() {
+class Cell {
+    constructor() {
         this.mine = false;
         this.hint = 0;
     }
-    return Cell;
-}());
+}
 /**
  *
  */
 function generateBoard(width, height, mineCount) {
-    var board = new Board(width, height, mineCount);
+    let board = new Board(width, height, mineCount);
     // adding rows, columns & cells
-    for (var i = 0; i < board.height; i++) {
+    for (let i = 0; i < board.height; i++) {
         board.cells.push([]);
-        for (var j = 0; j < board.width; j++)
+        for (let j = 0; j < board.width; j++)
             board.cells[i].push(new Cell());
     }
     board.plantMines(); // randomize mines
@@ -141,9 +146,7 @@ function generateBoard(width, height, mineCount) {
  * Helper class.
  * Adding additional functionalities.
  */
-var Helper = /** @class */ (function () {
-    function Helper() {
-    }
+class Helper {
     /**
      * Returns an array of n unique, random integers from range of numbers defined with upper and lower limit.
      *
@@ -151,19 +154,34 @@ var Helper = /** @class */ (function () {
      * @param max   range upper limit
      * @param n     array count
      * @returns     array of n unique, random integers from range of numbers defined with upper and lower limit (max & min)
+     *
+     * @example     getNUniqueRandomNumbers(1, 10, 2) returns [7, 4]
+     * @example     getNUniqueRandomNumbers(-1, 1, 2) returns [0, -1]
      */
-    Helper.getNUniqueRandomNumbers = function (min, max, n) {
-        var uniqueNumbers = [];
-        for (var i = min; i <= max; i++) {
+    static getNUniqueRandomNumbers(min, max, n) {
+        // param validation
+        if (!Number.isInteger(min) || !Number.isInteger(max) || !Number.isInteger(n)) {
+            throw new Error('Parameters "min", "max" and "n" must be integers.');
+        }
+        else if (min > max) {
+            throw new Error('Parameter "min" can\'t be bigger than parameter "max".');
+        }
+        else if (n < 0) {
+            throw new Error('Parameter "n" can\'t be negative number.');
+        }
+        else if (n > (Math.abs(max - min) + 1)) {
+            throw new Error('You\'re requesting too many unique numbers: n mustn\'t be bigger than given range.');
+        }
+        let uniqueNumbers = [];
+        for (let i = min; i <= max; i++) {
             uniqueNumbers.push(i);
         }
-        var nUniqueRandomNumbers = [];
-        for (var i = 0; i < n; i++) {
-            var randomIndex = Math.floor((Math.random() * uniqueNumbers.length));
+        let nUniqueRandomNumbers = [];
+        for (let i = 0; i < n; i++) {
+            let randomIndex = Math.floor((Math.random() * uniqueNumbers.length));
             nUniqueRandomNumbers.push(uniqueNumbers[randomIndex]);
             uniqueNumbers.splice(randomIndex, 1);
         }
         return nUniqueRandomNumbers;
-    };
-    return Helper;
-}());
+    }
+}

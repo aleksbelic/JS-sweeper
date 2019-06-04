@@ -11,7 +11,7 @@ class Board {
     cells: Cell[][] = [];
 
     /**
-     * 
+     * Board constructor.
      * @param width 
      * @param height 
      * @param mineCount 
@@ -38,14 +38,28 @@ class Board {
     }
 
     /**
-     * 
+     * Randomizes positions of mines.
      */
     plantMines(): void {
         let mineFieldsIndexes = Helper.getNUniqueRandomNumbers(0, (this.width * this.height - 1), this.mineCount);
+        // remove current mines
+        this.removeMines();
+        // plant new mines
         for (let mineFieldIndex of mineFieldsIndexes) {
             let boardRow:number = Math.floor(mineFieldIndex / this.width);
             let boardColumn:number = mineFieldIndex % this.width;
             this.cells[boardRow][boardColumn].mine = true;
+        }
+    }
+
+    /**
+     * Cleans the board of all mines.
+     */
+    removeMines(): void {
+        for (let row = 0; row < this.height; row++) {
+            for (let column = 0; column < this.width; column++) {
+                this.cells[row][column].mine = false;
+            }
         }
     }
 
@@ -153,8 +167,22 @@ class Helper {
      * @param max   range upper limit
      * @param n     array count
      * @returns     array of n unique, random integers from range of numbers defined with upper and lower limit (max & min)
+     * 
+     * @example     getNUniqueRandomNumbers(1, 10, 2) returns [7, 4]
+     * @example     getNUniqueRandomNumbers(-1, 1, 2) returns [0, -1]
      */
     static getNUniqueRandomNumbers(min: number, max: number, n: number): number[] {
+        // param validation
+        if (!Number.isInteger(min) || !Number.isInteger(max) || !Number.isInteger(n)) {
+            throw new Error('Parameters "min", "max" and "n" must be integers.');
+        } else if (min > max) {
+            throw new Error('Parameter "min" can\'t be bigger than parameter "max".');
+        } else if (n < 0) {
+            throw new Error('Parameter "n" can\'t be negative number.');
+        } else if (n > (Math.abs(max - min) + 1)) {
+            throw new Error('You\'re requesting too many unique numbers: n mustn\'t be bigger than given range.');
+        }
+
         let uniqueNumbers = [];
 	    for (let i = min; i <= max; i++) { 
 		    uniqueNumbers.push(i);
