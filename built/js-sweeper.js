@@ -103,6 +103,16 @@ class Board {
                 }
                 */
                 boardRow.appendChild(boardCell);
+                // left click event listener
+                boardCell.addEventListener('click', e => {
+                    if (this.cells[i][j].mine) {
+                        boardCell.classList.add('mine');
+                        console.log('GAME OVER');
+                        this.defeat();
+                    }
+                    else {
+                    }
+                });
                 // right click event listener
                 boardCell.addEventListener('contextmenu', e => {
                     e.preventDefault();
@@ -115,6 +125,12 @@ class Board {
                 });
             }
         }
+    }
+    /**
+     * Player steps on mine - game over.
+     */
+    defeat() {
+        // TODO
     }
 }
 /**
